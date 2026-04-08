@@ -1,0 +1,220 @@
+.damage-page {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.damage-page h1 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+}
+
+.report-btn {
+  background-color: #e74c3c;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+}
+
+.report-btn:hover {
+  background-color: #c0392b;
+}
+
+.damage-form {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.damage-form input,
+.damage-form select,
+.damage-form textarea {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+
+.damage-form textarea {
+  grid-column: 1 / -1;
+  resize: vertical;
+}
+
+.damage-form input:focus,
+.damage-form select:focus,
+.damage-form textarea:focus {
+  outline: none;
+  border-color: #e74c3c;
+}
+
+.damage-form button {
+  grid-column: 1 / -1;
+  background-color: #e74c3c;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.damage-form button:hover {
+  background-color: #c0392b;
+}
+
+.reports-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.reports-table th {
+  background-color: #e74c3c;
+  color: white;
+  padding: 1rem;
+  text-align: left;
+  font-weight: bold;
+}
+
+.reports-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.action-btn {
+  padding: 0.25rem 0.5rem;
+  margin: 0.25rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.assign-btn {
+  background-color: #3498db;
+  color: white;
+}
+
+.assign-btn:hover {
+  background-color: #2980b9;
+}
+
+.accept-btn {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.accept-btn:hover {
+  background-color: #27ae60;
+}
+
+.complete-btn {
+  background-color: #f39c12;
+  color: white;
+}
+
+.complete-btn:hover {
+  background-color: #e67e22;
+}
+
+.verify-btn {
+  background-color: #9b59b6;
+  color: white;
+}
+
+.verify-btn:hover {
+  background-color: #8e44ad;
+}
+
+.assign-form {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.assign-form select {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.assign-form button {
+  padding: 0.5rem 1rem;
+  background-color: #95a5a6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.assign-form button:hover {
+  background-color: #7f8c8d;
+}
+
+.status-reported {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.status-review {
+  color: #f39c12;
+  font-weight: bold;
+}
+
+.status-progress {
+  color: #3498db;
+  font-weight: bold;
+}
+
+.status-completed {
+  color: #2ecc71;
+  font-weight: bold;
+}
+
+.status-closed {
+  color: #95a5a6;
+  font-weight: bold;
+}
+
+.severity-low {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.severity-medium {
+  color: #f39c12;
+  font-weight: bold;
+}
+
+.severity-high {
+  color: #e67e22;
+  font-weight: bold;
+}
+
+.severity-critical {
+  color: #e74c3c;
+  font-weight: bold;
+}

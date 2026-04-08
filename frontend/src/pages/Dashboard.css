@@ -1,0 +1,130 @@
+.dashboard {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.dashboard h1 {
+  color: #2c3e50;
+  margin-bottom: 2rem;
+}
+
+.dashboard h2 {
+  color: #34495e;
+  margin: 2rem 0 1rem 0;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 0.5rem;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  border: 1px solid #f5c6cb;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.stat-card h3 {
+  color: #667eea;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.dashboard-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.data-table th {
+  background-color: #667eea;
+  color: white;
+  padding: 1rem;
+  text-align: left;
+  font-weight: bold;
+}
+
+.data-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.data-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.condition-excellent {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.condition-good {
+  color: #2ecc71;
+  font-weight: bold;
+}
+
+.condition-fair {
+  color: #f39c12;
+  font-weight: bold;
+}
+
+.condition-poor {
+  color: #e67e22;
+  font-weight: bold;
+}
+
+.condition-critical {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.severity-low {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.severity-medium {
+  color: #f39c12;
+  font-weight: bold;
+}
+
+.severity-high {
+  color: #e67e22;
+  font-weight: bold;
+}
+
+.severity-critical {
+  color: #e74c3c;
+  font-weight: bold;
+}

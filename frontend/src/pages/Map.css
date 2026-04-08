@@ -1,0 +1,64 @@
+.map-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 1rem;
+}
+
+.map-page h1 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+}
+
+.map-container {
+  flex: 1;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.popup-content {
+  font-size: 0.9rem;
+}
+
+.popup-content h3 {
+  margin: 0 0 0.5rem 0;
+  color: #2c3e50;
+}
+
+.popup-content p {
+  margin: 0.25rem 0;
+}
+
+.condition-excellent {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.condition-good {
+  color: #2ecc71;
+  font-weight: bold;
+}
+
+.condition-fair {
+  color: #f39c12;
+  font-weight: bold;
+}
+
+.condition-poor {
+  color: #e67e22;
+  font-weight: bold;
+}
+
+.condition-critical {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.map-info {
+  text-align: center;
+  margin-top: 1rem;
+  color: #666;
+  font-size: 1rem;
+}
