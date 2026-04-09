@@ -10,7 +10,7 @@ const {
 const { auth, managerAuth } = require('../middleware/auth');
 
 router.get('/', auth, getAllSchedules);
-router.get('/stats', managerAuth, getStatistics);
+router.get('/stats', auth, getStatistics);
 router.get('/:id', auth, getScheduleById);
 router.post('/', managerAuth, createSchedule);
 router.put('/:id', managerAuth, updateSchedule);

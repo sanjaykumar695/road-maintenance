@@ -19,6 +19,9 @@ const MapView = () => {
 
   useEffect(() => {
     loadRoads();
+    // Auto-refresh map every 30 seconds to show newly added roads
+    const interval = setInterval(loadRoads, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   const loadRoads = async () => {
@@ -53,21 +56,21 @@ const MapView = () => {
             <Marker key={road._id} position={[lat, lon]}>
               <Popup>
                 <div className="popup-content">
-                  <h3>{road.name}</h3>
+                  <h3>{road.roadName}</h3>
                   <p>
                     <strong>ID:</strong> {road.roadId}
                   </p>
                   <p>
-                    <strong>Type:</strong> {road.type}
+                    <strong>Type:</strong> {road.roadType}
+                  </p>
+                  <p>
+                    <strong>Address:</strong> {road.address}
                   </p>
                   <p>
                     <strong>Condition:</strong> <span className={`condition-${road.condition.toLowerCase()}`}>{road.condition}</span>
                   </p>
                   <p>
-                    <strong>Length:</strong> {road.length} km
-                  </p>
-                  <p>
-                    <strong>Location:</strong> {road.location.address || 'N/A'}
+                    <strong>Added by:</strong> {road.createdBy?.username || 'Unknown'}
                   </p>
                 </div>
               </Popup>
@@ -75,7 +78,7 @@ const MapView = () => {
           );
         })}
       </MapContainer>
-      <p className="map-info">Total Roads: {roads.length}</p>
+      <p className="map-info">Total Roads: {roads.length} (Auto-updates every 30 seconds)</p>
     </div>
   );
 };

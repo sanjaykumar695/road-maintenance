@@ -8,16 +8,20 @@ const roadAssetSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
-    name: {
+    roadName: {
       type: String,
       required: [true, 'Please provide road name'],
       trim: true,
     },
-    section: String,
-    type: {
+    roadType: {
       type: String,
       enum: ['Highway', 'Urban Street', 'Bridge', 'Rural Path', 'Other'],
       required: true,
+    },
+    address: {
+      type: String,
+      required: [true, 'Please provide road address'],
+      trim: true,
     },
     location: {
       type: {
@@ -29,44 +33,16 @@ const roadAssetSchema = new mongoose.Schema(
         type: [Number], // [longitude, latitude]
         required: true,
       },
-      address: String,
-    },
-    length: {
-      type: Number,
-      required: true,
-    },
-    width: Number,
-    assignedManager: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
     },
     condition: {
       type: String,
       enum: ['Excellent', 'Good', 'Fair', 'Poor', 'Critical'],
       default: 'Fair',
     },
-    conditionHistory: [
-      {
-        status: String,
-        reportedDate: Date,
-        description: String,
-      },
-    ],
-    budgetAllocation: Number,
-    lastMaintenanceDate: Date,
-    purchaseOrders: [
-      {
-        poNumber: String,
-        description: String,
-        supplier: String,
-        cost: Number,
-        status: String,
-        orderDate: Date,
-      },
-    ],
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
+      required: true,
     },
   },
   { timestamps: true }

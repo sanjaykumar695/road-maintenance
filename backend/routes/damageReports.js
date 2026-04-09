@@ -6,6 +6,8 @@ const {
   createReport,
   updateReport,
   getCriticalReports,
+  getCompletedReports,
+  getActivityLog,
   assignReport,
   acceptAssignment,
   completeWork,
@@ -17,6 +19,8 @@ const { auth, managerAuth } = require('../middleware/auth');
 
 router.get('/', auth, getAllReports);
 router.get('/critical', managerAuth, getCriticalReports);
+router.get('/completed', auth, getCompletedReports);
+router.get('/activity/log', auth, getActivityLog);
 router.get('/my-reports', auth, getMyReports);
 router.get('/my-assignments', auth, getMyAssignments);
 router.get('/:id', auth, getReportById);

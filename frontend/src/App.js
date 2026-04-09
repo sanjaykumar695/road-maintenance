@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import RoadManagement from './pages/RoadManagement';
 import DamageReporting from './pages/DamageReporting';
 import MaintenanceScheduling from './pages/MaintenanceScheduling';
+import ManagerAssignments from './pages/ManagerAssignments';
 import MapView from './pages/MapView';
 import './App.css';
 
@@ -50,6 +51,14 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <MaintenanceScheduling />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-assignments"
+          element={
+            <ProtectedRoute>
+              <ManagerAssignments />
             </ProtectedRoute>
           }
         />

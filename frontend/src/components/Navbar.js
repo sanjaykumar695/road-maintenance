@@ -43,6 +43,11 @@ const Navbar = () => {
                 <button className="nav-link" onClick={() => navTo('/maintenance')}>
                   Maintenance
                 </button>
+                {user?.role === 'Maintenance Manager' && (
+                  <button className="nav-link" onClick={() => navTo('/my-assignments')}>
+                    My Assignments
+                  </button>
+                )}
                 <button className="nav-link" onClick={() => navTo('/map')}>
                   Map
                 </button>

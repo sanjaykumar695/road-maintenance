@@ -19,6 +19,7 @@
   font-size: 1rem;
   margin-bottom: 1.5rem;
   font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 .report-btn:hover {
@@ -31,46 +32,70 @@
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
 }
 
-.damage-form input,
-.damage-form select,
-.damage-form textarea {
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
   padding: 0.75rem;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 0.9rem;
   font-family: inherit;
+  box-sizing: border-box;
 }
 
-.damage-form textarea {
-  grid-column: 1 / -1;
+.form-group textarea {
   resize: vertical;
 }
 
-.damage-form input:focus,
-.damage-form select:focus,
-.damage-form textarea:focus {
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
   outline: none;
   border-color: #e74c3c;
+  box-shadow: 0 0 5px rgba(231, 76, 60, 0.3);
 }
 
-.damage-form button {
-  grid-column: 1 / -1;
+.coordinates-input {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.coordinates-input input {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 0.75rem;
   background-color: #e74c3c;
   color: white;
-  padding: 0.75rem;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 1rem;
   font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
-.damage-form button:hover {
+.submit-btn:hover {
   background-color: #c0392b;
 }
 
@@ -94,6 +119,10 @@
 .reports-table td {
   padding: 0.75rem 1rem;
   border-bottom: 1px solid #ddd;
+}
+
+.reports-table tbody tr:hover {
+  background-color: #f9f9f9;
 }
 
 .action-btn {

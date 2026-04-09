@@ -5,13 +5,13 @@ const RoadAsset = require('../models/RoadAsset');
 // @access  Private
 exports.getAllRoads = async (req, res) => {
   try {
-    const { type, condition } = req.query;
+    const { roadType, condition } = req.query;
     let filter = {};
 
-    if (type) filter.type = type;
+    if (roadType) filter.roadType = roadType;
     if (condition) filter.condition = condition;
 
-    const roads = await RoadAsset.find(filter).populate('assignedManager createdBy');
+    const roads = await RoadAsset.find(filter).populate('createdBy');
     res.status(200).json({
       success: true,
       count: roads.length,
@@ -27,7 +27,7 @@ exports.getAllRoads = async (req, res) => {
 // @access  Private
 exports.getRoadById = async (req, res) => {
   try {
-    const road = await RoadAsset.findById(req.params.id).populate('assignedManager createdBy');
+    const road = await RoadAsset.findById(req.params.id).populate('createdBy');
     if (!road) {
       return res.status(404).json({ message: 'Road not found' });
     }
@@ -40,83 +40,64 @@ exports.getRoadById = async (req, res) => {
   }
 };
 
-// @desc    Create road asset
+// @desc    Create road asset (End User/Inspector only)
 // @route   POST /api/roads
-// @access  Private/Manager
+// @access  Private/End User
 exports.createRoad = async (req, res) => {
   try {
-    const { roadId, name, section, type, coordinates, address, length, width, assignedManager, budgetAllocation } = req.body;
+    // Only End User/Inspector can create roads
+    if (req.user.role !== 'End User/Inspector') {
+      return res.status(403).json({ message: 'Only End Users/Inspectors can add roads' });
+    }
 
+    const { roadId, roadName, roadType, address, coordinates } = req.body;
+
+    // Create the road with Location
     const road = await RoadAsset.create({
       roadId,
-      name,
-      section,
-      type,
+      roadName,
+      roadType,
+      address,
       location: {
         type: 'Point',
-        coordinates,
-        address,
+        coordinates, // [longitude, latitude]
       },
-      length,
-      width,
-      assignedManager,
-      budgetAllocation,
+      condition: 'Fair', // Default condition
       createdBy: req.user.id,
     });
 
+    const populatedRoad = await road.populate('createdBy');
+
     res.status(201).json({
       success: true,
-      road,
+      road: populatedRoad,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// @desc    Update road asset
-// @route   PUT /api/roads/:id
-// @access  Private/Manager
-exports.updateRoad = async (req, res) => {
-  try {
-    let road = await RoadAsset.findById(req.params.id);
-    if (!road) {
-      return res.status(404).json({ message: 'Road not found' });
-    }
-
-    road = await RoadAsset.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-
-    res.status(200).json({
-      success: true,
-      road,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// @desc    Update road condition
+// @desc    Update road condition (Admin/Manager only)
 // @route   PUT /api/roads/:id/condition
-// @access  Private
+// @access  Private/Admin or Manager
 exports.updateRoadCondition = async (req, res) => {
   try {
-    const { status, description } = req.body;
+    const { condition } = req.body;
+    
+    // Only Admin or Manager can update condition
+    if (!['Admin', 'Maintenance Manager'].includes(req.user.role)) {
+      return res.status(403).json({ message: 'Only Admins or Managers can update road condition' });
+    }
+
     const road = await RoadAsset.findById(req.params.id);
 
     if (!road) {
       return res.status(404).json({ message: 'Road not found' });
     }
 
-    road.condition = status;
-    road.conditionHistory.push({
-      status,
-      reportedDate: new Date(),
-      description,
-    });
-
+    road.condition = condition;
     await road.save();
+
     res.status(200).json({
       success: true,
       road,
@@ -126,11 +107,15 @@ exports.updateRoadCondition = async (req, res) => {
   }
 };
 
-// @desc    Delete road asset
+// @desc    Delete road asset (Admin only)
 // @route   DELETE /api/roads/:id
 // @access  Private/Admin
 exports.deleteRoad = async (req, res) => {
   try {
+    if (req.user.role !== 'Admin') {
+      return res.status(403).json({ message: 'Only admins can delete roads' });
+    }
+
     const road = await RoadAsset.findByIdAndDelete(req.params.id);
     if (!road) {
       return res.status(404).json({ message: 'Road not found' });

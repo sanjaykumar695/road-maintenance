@@ -133,3 +133,86 @@
   color: #e74c3c;
   font-weight: bold;
 }
+
+.expanded-row {
+  background-color: #ecf0f1;
+}
+
+.expanded-row td {
+  padding: 1.5rem;
+}
+
+.completion-form {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #27ae60;
+}
+
+.completion-form h4 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.completion-form p {
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.completion-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  margin-bottom: 1rem;
+}
+
+.completion-form textarea:focus {
+  outline: none;
+  border-color: #27ae60;
+  box-shadow: 0 0 5px rgba(39, 174, 96, 0.3);
+}
+
+.dashboard-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.dashboard-section h2 {
+  color: #34495e;
+  margin: 0 0 1rem 0;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 0.5rem;
+}
+
+.notes-cell {
+  max-width: 300px;
+  word-wrap: break-word;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.severity-low {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.severity-medium {
+  color: #f39c12;
+  font-weight: bold;
+}
+
+.severity-high {
+  color: #e67e22;
+  font-weight: bold;
+}
+
+.severity-critical {
+  color: #e74c3c;
+  font-weight: bold;
+}

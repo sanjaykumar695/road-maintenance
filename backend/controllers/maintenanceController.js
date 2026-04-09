@@ -74,6 +74,10 @@ exports.createSchedule = async (req, res) => {
 
     const populatedSchedule = await schedule.populate('damageReport roadAsset assignedTeam');
 
+    // Emit real-time update for dashboard statistics
+    const stats = await getUpdatedStats();
+    global.io.emit('statsUpdate', stats);
+
     res.status(201).json({
       success: true,
       schedule: populatedSchedule,
@@ -107,12 +111,38 @@ exports.updateSchedule = async (req, res) => {
       runValidators: true,
     }).populate('damageReport roadAsset assignedTeam');
 
+    // Emit real-time update for dashboard statistics
+    const stats = await getUpdatedStats();
+    global.io.emit('statsUpdate', stats);
+
     res.status(200).json({
       success: true,
       schedule,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+// Helper function to get updated statistics
+const getUpdatedStats = async () => {
+  try {
+    const totalSchedules = await MaintenanceSchedule.countDocuments();
+    const completedSchedules = await MaintenanceSchedule.countDocuments({ status: 'Completed' });
+    const inProgressSchedules = await MaintenanceSchedule.countDocuments({ status: 'In Progress' });
+    const totalExpenditure = await MaintenanceSchedule.aggregate([
+      { $group: { _id: null, total: { $sum: '$actualCost' } } },
+    ]);
+
+    return {
+      total: totalSchedules,
+      completed: completedSchedules,
+      inProgress: inProgressSchedules,
+      totalExpenditure: totalExpenditure[0]?.total || 0,
+    };
+  } catch (error) {
+    console.error('Error getting updated stats:', error);
+    return null;
   }
 };
 

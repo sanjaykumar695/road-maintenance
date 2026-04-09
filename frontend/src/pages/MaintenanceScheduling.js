@@ -100,7 +100,7 @@ const MaintenanceScheduling = () => {
                 <option value="">Select Damage Report</option>
                 {reports.map((report) => (
                   <option key={report._id} value={report._id}>
-                    {report.reportId} - {report.roadAsset?.name}
+                    {report.reportId} - {report.roadAsset?.roadName}
                   </option>
                 ))}
               </select>
@@ -158,7 +158,7 @@ const MaintenanceScheduling = () => {
             {schedules.map((schedule) => (
               <tr key={schedule._id}>
                 <td>{schedule.scheduleId}</td>
-                <td>{schedule.roadAsset?.name}</td>
+                <td>{schedule.roadAsset?.roadName}</td>
                 <td>{new Date(schedule.scheduledDate).toLocaleDateString()}</td>
                 <td>{schedule.workDescription?.substring(0, 30)}...</td>
                 <td>₹{schedule.estimatedCost || 0}</td>

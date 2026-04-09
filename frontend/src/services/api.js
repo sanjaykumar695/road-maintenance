@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL || '/api';
 
 const getToken = () => localStorage.getItem('token');
 
@@ -39,6 +39,8 @@ export const damageService = {
   createReport: (data) => apiCall('POST', '/damage-reports', data),
   updateReport: (id, data) => apiCall('PUT', `/damage-reports/${id}`, data),
   getCriticalReports: () => apiCall('GET', '/damage-reports/critical'),
+  getCompletedReports: () => apiCall('GET', '/damage-reports/completed'),
+  getActivityLog: (limit = 10) => apiCall('GET', `/damage-reports/activity/log?limit=${limit}`),
   getMyReports: () => apiCall('GET', '/damage-reports/my-reports'),
   getMyAssignments: () => apiCall('GET', '/damage-reports/my-assignments'),
   assignReport: (id, data) => apiCall('PUT', `/damage-reports/${id}/assign`, data),

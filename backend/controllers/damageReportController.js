@@ -1,6 +1,29 @@
 const DamageReport = require('../models/DamageReport');
 const RoadAsset = require('../models/RoadAsset');
 
+// Helper function to get updated statistics
+const getUpdatedStats = async () => {
+  try {
+    const MaintenanceSchedule = require('../models/MaintenanceSchedule');
+    const totalSchedules = await MaintenanceSchedule.countDocuments();
+    const completedSchedules = await MaintenanceSchedule.countDocuments({ status: 'Completed' });
+    const inProgressSchedules = await MaintenanceSchedule.countDocuments({ status: 'In Progress' });
+    const totalExpenditure = await MaintenanceSchedule.aggregate([
+      { $group: { _id: null, total: { $sum: '$actualCost' } } },
+    ]);
+
+    return {
+      total: totalSchedules,
+      completed: completedSchedules,
+      inProgress: inProgressSchedules,
+      totalExpenditure: totalExpenditure[0]?.total || 0,
+    };
+  } catch (error) {
+    console.error('Error getting updated stats:', error);
+    return null;
+  }
+};
+
 // @desc    Get all damage reports
 // @route   GET /api/damage-reports
 // @access  Private
@@ -81,7 +104,25 @@ exports.createReport = async (req, res) => {
       await report.save();
     }
 
+    // Automatically create maintenance schedule for the report
+    const MaintenanceSchedule = require('../models/MaintenanceSchedule');
+    await MaintenanceSchedule.create({
+      damageReport: report._id,
+      roadAsset,
+      scheduledDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
+      assignedTeam: null, // Will be assigned by admin/manager later
+      workDescription: `Scheduled maintenance for ${damageType} issue on ${road.roadName}`,
+      estimatedCost: 0, // Will be set by manager
+      status: 'Scheduled',
+    });
+
     const populatedReport = await report.populate('roadAsset reportedBy');
+
+    // Emit real-time update for dashboard statistics
+    const stats = await getUpdatedStats();
+    if (stats && global.io) {
+      global.io.emit('statsUpdate', stats);
+    }
 
     res.status(201).json({
       success: true,
@@ -200,7 +241,32 @@ exports.acceptAssignment = async (req, res) => {
     report.status = 'In Progress';
     await report.save();
 
+    // Create maintenance schedule automatically when manager accepts
+    const MaintenanceSchedule = require('../models/MaintenanceSchedule');
+    const existingSchedule = await MaintenanceSchedule.findOne({ damageReport: report._id });
+
+    if (!existingSchedule) {
+      await MaintenanceSchedule.create({
+        damageReport: report._id,
+        roadAsset: report.roadAsset,
+        scheduledDate: new Date(),
+        assignedTeam: req.user.id,
+        workDescription: `Maintenance for ${report.damageType} issue`,
+        estimatedCost: 0,
+        status: 'In Progress',
+      });
+    } else {
+      existingSchedule.status = 'In Progress';
+      await existingSchedule.save();
+    }
+
     const populatedReport = await report.populate('roadAsset reportedBy assignedTo assignedBy');
+
+    // Emit real-time update for dashboard statistics
+    const stats = await getUpdatedStats();
+    if (stats && global.io) {
+      global.io.emit('statsUpdate', stats);
+    }
 
     res.status(200).json({
       success: true,
@@ -238,7 +304,22 @@ exports.completeWork = async (req, res) => {
     report.status = 'Completed';
     await report.save();
 
+    // Update maintenance schedule status to completed
+    const MaintenanceSchedule = require('../models/MaintenanceSchedule');
+    const schedule = await MaintenanceSchedule.findOne({ damageReport: report._id });
+    if (schedule) {
+      schedule.status = 'Completed';
+      schedule.completionDate = new Date();
+      await schedule.save();
+    }
+
     const populatedReport = await report.populate('roadAsset reportedBy assignedTo assignedBy');
+
+    // Emit real-time update for dashboard statistics
+    const stats = await getUpdatedStats();
+    if (stats && global.io) {
+      global.io.emit('statsUpdate', stats);
+    }
 
     res.status(200).json({
       success: true,
@@ -324,6 +405,52 @@ exports.getMyReports = async (req, res) => {
       success: true,
       count: reports.length,
       reports,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Get completed work reports
+// @route   GET /api/damage-reports/completed
+// @access  Private
+exports.getCompletedReports = async (req, res) => {
+  try {
+    const reports = await DamageReport.find({
+      status: 'Completed',
+    })
+      .populate('roadAsset reportedBy assignedTo assignedBy')
+      .sort({ completedDate: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: reports.length,
+      reports,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Get activity log of recently completed work
+// @route   GET /api/damage-reports/activity/log
+// @access  Private
+exports.getActivityLog = async (req, res) => {
+  try {
+    const { limit = 10 } = req.query;
+    
+    const activities = await DamageReport.find({
+      status: 'Completed',
+      completedDate: { $exists: true },
+    })
+      .populate('roadAsset reportedBy assignedTo assignedBy')
+      .sort({ completedDate: -1 })
+      .limit(parseInt(limit));
+
+    res.status(200).json({
+      success: true,
+      count: activities.length,
+      activities,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

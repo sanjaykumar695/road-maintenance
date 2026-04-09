@@ -19,7 +19,6 @@ const DamageReporting = () => {
     damageType: 'Potholes',
     severity: 'Medium',
     description: '',
-    coordinates: ['', ''],
     photos: '',
   });
 
@@ -61,9 +60,16 @@ const DamageReporting = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Get coordinates from selected road
+      const selectedRoad = roads.find(road => road._id === formData.roadAsset);
+      if (!selectedRoad) {
+        alert('Please select a valid road');
+        return;
+      }
+
       const submitData = {
         ...formData,
-        coordinates: [parseFloat(formData.coordinates[0]), parseFloat(formData.coordinates[1])],
+        coordinates: selectedRoad.location.coordinates,
         photos: formData.photos ? [formData.photos] : [],
       };
       await damageService.createReport(submitData);
@@ -72,7 +78,6 @@ const DamageReporting = () => {
         damageType: 'Potholes',
         severity: 'Medium',
         description: '',
-        coordinates: ['', ''],
         photos: '',
       });
       setShowForm(false);
@@ -124,13 +129,7 @@ const DamageReporting = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'longitude') {
-      setFormData({ ...formData, coordinates: [value, formData.coordinates[1]] });
-    } else if (name === 'latitude') {
-      setFormData({ ...formData, coordinates: [formData.coordinates[0], value] });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
+    setFormData({ ...formData, [name]: value });
   };
 
   const getStatusColor = (status) => {
@@ -158,64 +157,59 @@ const DamageReporting = () => {
 
       {showForm && (
         <form className="damage-form" onSubmit={handleSubmit}>
-          <select name="roadAsset" value={formData.roadAsset} onChange={handleChange} required>
-            <option value="">Select Road Asset</option>
-            {roads.map((road) => (
-              <option key={road._id} value={road._id}>
-                {road.roadId} - {road.name}
-              </option>
-            ))}
-          </select>
-          <select name="damageType" value={formData.damageType} onChange={handleChange}>
-            <option value="Potholes">Potholes</option>
-            <option value="Cracks">Cracks</option>
-            <option value="Surface Deterioration">Surface Deterioration</option>
-            <option value="Flooding">Flooding</option>
-            <option value="Subsidence">Subsidence</option>
-            <option value="Other">Other</option>
-          </select>
-          <select name="severity" value={formData.severity} onChange={handleChange}>
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-            <option value="Critical">Critical</option>
-          </select>
-          <div className="coordinates-input">
-            <input
-              type="number"
-              name="longitude"
-              placeholder="Longitude"
-              value={formData.coordinates[0]}
+          <div className="form-group">
+            <label>Road Asset *</label>
+            <select name="roadAsset" value={formData.roadAsset} onChange={handleChange} required>
+              <option value="">Select Road Asset</option>
+              {roads.map((road) => (
+                <option key={road._id} value={road._id}>
+                  {road.roadId} - {road.roadName} ({road.address})
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Damage Type *</label>
+            <select name="damageType" value={formData.damageType} onChange={handleChange}>
+              <option value="Potholes">Potholes</option>
+              <option value="Cracks">Cracks</option>
+              <option value="Surface Deterioration">Surface Deterioration</option>
+              <option value="Flooding">Flooding</option>
+              <option value="Subsidence">Subsidence</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Severity *</label>
+            <select name="severity" value={formData.severity} onChange={handleChange}>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+              <option value="Critical">Critical</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Description *</label>
+            <textarea
+              name="description"
+              placeholder="Describe the damage in detail"
+              value={formData.description}
               onChange={handleChange}
-              step="any"
               required
-            />
+              rows="4"
+            ></textarea>
+          </div>
+          <div className="form-group">
+            <label>Photo URL (Optional)</label>
             <input
-              type="number"
-              name="latitude"
-              placeholder="Latitude"
-              value={formData.coordinates[1]}
+              type="url"
+              name="photos"
+              placeholder="https://example.com/photo.jpg"
+              value={formData.photos}
               onChange={handleChange}
-              step="any"
-              required
             />
           </div>
-          <textarea
-            name="description"
-            placeholder="Damage Description"
-            value={formData.description}
-            onChange={handleChange}
-            required
-            rows="4"
-          ></textarea>
-          <input
-            type="url"
-            name="photos"
-            placeholder="Photo URL (optional)"
-            value={formData.photos}
-            onChange={handleChange}
-          />
-          <button type="submit">Submit Damage Report</button>
+          <button type="submit" className="submit-btn">Submit Damage Report</button>
         </form>
       )}
 
@@ -253,7 +247,7 @@ const DamageReporting = () => {
             {reports.map((report) => (
               <tr key={report._id}>
                 <td>{report.reportId}</td>
-                <td>{report.roadAsset?.name || report.roadAsset}</td>
+                <td>{report.roadAsset?.roadName || report.roadAsset}</td>
                 <td>{report.damageType}</td>
                 <td className={`severity-${report.severity.toLowerCase()}`}>{report.severity}</td>
                 <td>{report.description?.substring(0, 30)}...</td>

@@ -9,6 +9,35 @@
   margin-bottom: 1.5rem;
 }
 
+.message-box {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  border-left: 4px solid #e74c3c;
+}
+
+.message-box.success {
+  background-color: #d5f4e6;
+  color: #27ae60;
+  border-left-color: #27ae60;
+}
+
+.message-box.error {
+  background-color: #fadbd8;
+  color: #c0392b;
+  border-left-color: #e74c3c;
+}
+
+.info-box {
+  background-color: #ecf0f1;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #3498db;
+  color: #2c3e50;
+}
+
 .add-btn {
   background-color: #27ae60;
   color: white;
@@ -19,6 +48,7 @@
   font-size: 1rem;
   margin-bottom: 1.5rem;
   font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 .add-btn:hover {
@@ -31,13 +61,51 @@
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
 }
 
-.road-form input,
-.road-form select {
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #27ae60;
+  box-shadow: 0 0 5px rgba(39, 174, 96, 0.3);
+}
+
+.form-group small {
+  display: block;
+  color: #7f8c8d;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.address-input-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.address-input-group input {
+  flex: 1;
   padding: 0.75rem;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -45,26 +113,42 @@
   font-family: inherit;
 }
 
-.road-form input:focus,
-.road-form select:focus {
-  outline: none;
-  border-color: #667eea;
+.location-btn {
+  padding: 0.75rem 1rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  white-space: nowrap;
+  transition: background-color 0.3s ease;
 }
 
-.road-form button {
-  grid-column: 1 / -1;
-  background-color: #667eea;
-  color: white;
+.location-btn:hover {
+  background-color: #2980b9;
+}
+
+.location-btn:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.submit-btn {
+  width: 100%;
   padding: 0.75rem;
+  background-color: #27ae60;
+  color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 1rem;
   font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
-.road-form button:hover {
-  background-color: #5568d3;
+.submit-btn:hover {
+  background-color: #229954;
 }
 
 .filter-section {
@@ -90,30 +174,80 @@
   font-size: 0.9rem;
 }
 
-.roads-table {
-  width: 100%;
-  border-collapse: collapse;
+.roads-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.road-card {
   background: white;
   border-radius: 8px;
-  overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.roads-table th {
-  background-color: #667eea;
-  color: white;
+.road-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.road-header {
   padding: 1rem;
-  text-align: left;
+  border-bottom: 2px solid #ecf0f1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.road-header h3 {
+  color: #2c3e50;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.condition-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
   font-weight: bold;
+  color: white;
 }
 
-.roads-table td {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid #ddd;
+.condition-badge.condition-excellent {
+  background-color: #27ae60;
 }
 
-.roads-table tbody tr:hover {
-  background-color: #f9f9f9;
+.condition-badge.condition-good {
+  background-color: #2ecc71;
+}
+
+.condition-badge.condition-fair {
+  background-color: #f39c12;
+}
+
+.condition-badge.condition-poor {
+  background-color: #e67e22;
+}
+
+.condition-badge.condition-critical {
+  background-color: #e74c3c;
+}
+
+.road-details {
+  padding: 1rem;
+}
+
+.road-details p {
+  margin: 0.5rem 0;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.road-details strong {
+  color: #2c3e50;
+  font-weight: 600;
 }
 
 .no-data {
@@ -121,29 +255,4 @@
   padding: 2rem;
   color: #666;
   font-size: 1.1rem;
-}
-
-.condition-excellent {
-  color: #27ae60;
-  font-weight: bold;
-}
-
-.condition-good {
-  color: #2ecc71;
-  font-weight: bold;
-}
-
-.condition-fair {
-  color: #f39c12;
-  font-weight: bold;
-}
-
-.condition-poor {
-  color: #e67e22;
-  font-weight: bold;
-}
-
-.condition-critical {
-  color: #e74c3c;
-  font-weight: bold;
 }
